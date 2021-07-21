@@ -1,0 +1,20 @@
+
+.container {
+    display:block;
+    width: 90%;
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+
+.leftHeader {
+    width: 70%;
+    float:left; /* add this */
+    white-space: nowrap;
+}
+
+.rightHeader {
+    float: right;
+    width: 30%;
+
+}
+
+

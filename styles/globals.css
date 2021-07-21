@@ -1,16 +1,78 @@
-html,
+/* this is an abbreviated version of @font-face, meant to show how to reference the font in the relative url attribute.
+/* assuming the fonts were stored in public/fonts */
+
+@font-face {
+    font-family: 'noto_sans_jpthin';
+    src: url('/fonts/notosansjp-thin-webfont.woff2') format('woff2'),
+    url('/fonts/notosansjp-thin-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    /* border: 2px solid #ccff00  */;
+    background-color: #e4d1d1;
+    font-family: 'noto_sans_jpthin';
+    color: dimgray;
+}
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: 'noto_sans_jpthin';
+
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
+
+
+
+/* [ON BIG SCREEN] */
+/* (A) WRAPPER */
+#hamnav {
+    width: 100%;
+}
+
+/* (B) HORIZONTAL MENU ITEMS */
+#hamitems {
+    display: flex;
+}
+
+#hamitems a {
+    flex-grow: 1;
+    flex-basis: 0;
+    position: relative;
+    display: inline-block;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 2px;
+}
+
+#hamitems a:after {
+     content: "";
+     position: absolute;
+     height: 3px;
+     width: calc(100% - 30px);
+     bottom: 10px;
+     transition: all 0.3s ease-out;
+     background: #ccff00;
+     left: 50%;
+     transform: translateX(-50%) scaleX(0);
+ }
+
+#hamitems a:hover:after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* (C) HIDE HAMBURGER */
+#hamnav label, #hamburger { display: none; }
+
+
+
