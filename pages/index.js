@@ -32,10 +32,10 @@ const Home = ({ works, error }) => {
                     <a href="#" onClick={() => openLightboxOnSlide(index+1)}>
                         <Image
                             className={styles.workImage}
-                            src={"http://goodgrid-strapi.sloppy.zone" + work.Images.small.url}
+                            src={"https://goodgrid-strapi.sloppy.zone" + work.Images.small.url}
                             alt={work.Title}
                             placeholder="blur"
-                            blurDataURL={"http://goodgrid-strapi.sloppy.zone" + work.Images.thumbnail.url}
+                            blurDataURL={"https://goodgrid-strapi.sloppy.zone" + work.Images.thumbnail.url}
                             width="500"
                             height={500*work.Images.small.height/work.Images.small.width}
                             layout="intrinsic"
@@ -47,7 +47,7 @@ const Home = ({ works, error }) => {
                     toggler={toggler.toggler}
                     slide={toggler.slide}
                     sources={works.map(work => {
-                        return "http://goodgrid-strapi.sloppy.zone" + work.Images.large.url
+                        return "https://goodgrid-strapi.sloppy.zone" + work.Images.large.url
                     })}
                 />
                 </div>
