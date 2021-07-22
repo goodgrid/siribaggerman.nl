@@ -14,7 +14,7 @@ const Timeline = (props, error) => {
             <div className={styles.avatar}><Image src={`${Config.strapiHost}${props.avatar.url}`} width="110" height="110"/></div>
         <div className={styles.timeline}>
             {props.experiences.map((experience, index) =>
-                <div className={ styles.container + " " + ((index % 2 == 0)?styles.left:styles.right) }>
+                <div key={index} className={ styles.container + " " + ((index % 2 == 0)?styles.left:styles.right) }>
                     <div className={styles.content}>
                         <p>{experience.Description}</p>
                     </div>
