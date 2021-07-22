@@ -1,14 +1,15 @@
 import styles from "../styles/Home.module.css";
-import Head from "next/head";
 import axios from 'axios';
 import Image from "next/image";
 import React, {useState} from "react";
 import FsLightbox from 'fslightbox-react';
 import Header from "../components/header.js";
+import { Config } from "../components/config.js";
 
 
 
-const Home = ({ works, error }) => {
+
+const Home = ( props, error ) => {
 
     const [toggler, setToggler] = React.useState({
         toggler: false,
@@ -21,21 +22,21 @@ const Home = ({ works, error }) => {
             slide: number
         });
     }
-
+    console.log(props)
     return (
         <main className={styles.main}>
                 <Header />
                 <div>
-                {works.reverse().map((work, index) =>
+                {props.works.reverse().map((work, index) =>
 
                     <div key={index} className={styles.workContainer} >
                     <a href="#" onClick={() => openLightboxOnSlide(index+1)}>
                         <Image
                             className={styles.workImage}
-                            src={"https://goodgrid-strapi.sloppy.zone" + work.Images.small.url}
+                            src={Config.strapiHost + work.Images.small.url}
                             alt={work.Title}
                             placeholder="blur"
-                            blurDataURL={"https://goodgrid-strapi.sloppy.zone" + work.Images.thumbnail.url}
+                            blurDataURL={Config.strapiHost + work.Images.thumbnail.url}
                             width="500"
                             height={500*work.Images.small.height/work.Images.small.width}
                             layout="intrinsic"
@@ -46,8 +47,8 @@ const Home = ({ works, error }) => {
                 <FsLightbox
                     toggler={toggler.toggler}
                     slide={toggler.slide}
-                    sources={works.map(work => {
-                        return "https://goodgrid-strapi.sloppy.zone" + work.Images.large.url
+                    sources={props.works.map(work => {
+                        return Config.strapiHost + work.Images.large.url
                     })}
                 />
                 </div>
@@ -61,7 +62,8 @@ const Home = ({ works, error }) => {
 
 Home.getInitialProps = async ctx => {
     try {
-        const res = await axios.get('http://goodgrid-strapi.sloppy.zone/works');
+        console.log(`Getting WORKS at ${Config.strapiHost}`)
+        const res = await axios.get(`${Config.strapiHost}/works`);
         const works = res.data.map(work => {
             return {
                 Title: work.Title,

@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 import styles from "../styles/Header.module.css";
 import Head from "next/head";
 import Link from "next/link";
@@ -22,19 +21,11 @@ const Header = ({ menuItems, error }) => {
                     </h1>
                 </div>
                 <div className={styles.rightHeader}>
-                    <nav id="hamnav">
-                        <label htmlFor="hamburger">&#9776;</label>
-                        <input type="checkbox" id="hamburger"/>
-
-                        <div id="hamitems">
-                            <Link href="/">See</Link>
-                            <Link href="/know">Know</Link>
-                            <Link href="/greet">Meet</Link>
-                        </div>
-                    </nav>
+                    <Link href="/"><a className={styles.navitem}>See</a></Link>
+                    <Link href="/know"><a className={styles.navitem}>Know</a></Link>
+                    <Link href="/greet"><a className={styles.navitem}>Meet</a></Link>
                 </div>
             </div>
-
         </>
     )
 }
