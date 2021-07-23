@@ -1,30 +1,25 @@
-
-
-/* Timeline from ... */
-
 .avatar {
-
     width: 110px;
     height: 110px;
     margin-left: auto;
     margin-right: auto;
-    -moz-border-radius: 55px;
-    -webkit-border-radius: 55px;
-    border-radius: 50px;
-    border: 5px solid #ccff00;
-    overflow: inherit;
+    -moz-border-radius: 57px;
+    -webkit-border-radius: 57px;
+    border-radius: 57px;
+    border: 4px solid #ccff00;
 }
 
 .avatar img {
-    width: 100px;
-    height: 100px;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px;
+    width: 110px;
+    height: 110px;
+    -moz-border-radius: 55px;
+    -webkit-border-radius: 55px;
+    border-radius: 55px;
     max-width:100%;
     max-height:100%
-
 }
+
+/* Timeline from https://www.sliderrevolution.com/resources/css-timeline */
 
 /* The actual timeline (the vertical ruler) */
 .timeline {
@@ -38,7 +33,7 @@
     content: '';
     position: absolute;
     width: 6px;
-    background-color: #ccff00;
+    background-color: white;
     top: 0;
     bottom: 0;
     left: 50%;
@@ -51,6 +46,9 @@
     position: relative;
     background-color: inherit;
     width: 50%;
+
+
+    border: 1px solid red;
 }
 
 /* The circles on the timeline */
@@ -60,8 +58,8 @@
     width: 25px;
     height: 25px;
     right: -17px;
-    background-color: #ccff00;
-    border: 4px solid #ccff00;
+    background-color: #61D4E8;
+    border: 4px solid #2DA1E7;
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -69,7 +67,9 @@
 
 /* Place the container to the left */
 .left {
+    border: 1px solid red;
     left: 0;
+
 }
 
 /* Place the container to the right */
@@ -88,7 +88,7 @@
     right: 30px;
     border: medium solid white;
     border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent #C693A1;
+    border-color: transparent transparent transparent white;
 }
 
 /* Add arrows to the right container (pointing left) */
@@ -102,21 +102,24 @@
     left: 30px;
     border: medium solid white;
     border-width: 10px 10px 10px 0;
-    border-color: transparent #C693A1 transparent transparent;
+    border-color: transparent white transparent transparent;
 }
 
 /* Fix the circle for containers on the right side */
 .right::after {
     left: -16px;
 }
+.left::after {
+    right: 2px;
+}
+
 
 /* The actual content */
 .content {
     padding: 20px 30px;
-    background-color: #C693A1;
+    background-color: white;
     position: relative;
     border-radius: 6px;
-    color:white;
 }
 
 /* Media queries - Responsive timeline on screens less than 600px wide */
@@ -151,7 +154,3 @@
         left: 0%;
     }
 }
-
-
-
-

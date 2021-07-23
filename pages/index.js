@@ -24,11 +24,13 @@ const Home = ( props, error ) => {
     }
     console.log(props)
     return (
-        <main className={styles.main}>
-                <Header />
-                <div>
-                {props.works.reverse().map((work, index) =>
+        <>
+            <Header />
+            <main className={styles.main}>
 
+                <div>
+
+                {props.works.reverse().map((work, index) =>
                     <div key={index} className={styles.workContainer} >
                     <a href="#" onClick={() => openLightboxOnSlide(index+1)}>
                         <Image
@@ -47,13 +49,13 @@ const Home = ( props, error ) => {
                 <FsLightbox
                     toggler={toggler.toggler}
                     slide={toggler.slide}
-                    sources={props.works.map(work => {
+                    sources={props.works.reverse().map(work => {
                         return Config.strapiHost + work.Images.large.url
                     })}
                 />
                 </div>
-        </main>
-
+            </main>
+        </>
     );
     if (error) {
         return <div>An error occured: {error.message}</div>;

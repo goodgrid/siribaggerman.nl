@@ -21,11 +21,12 @@ const Header = ({ menuItems, error }) => {
                     </h1>
                 </div>
                 <div className={styles.rightHeader}>
-                    <Link href="/"><a className={styles.navitem}>See</a></Link>
-                    <Link href="/know"><a className={styles.navitem}>Know</a></Link>
-                    <Link href="/greet"><a className={styles.navitem}>Meet</a></Link>
+                    <Link href="/"><a className={styles.navitem}>Current work</a></Link>
+                    <Link href="/know"><a className={styles.navitem}>Portfolio</a></Link>
+                    <Link href="/greet"><a className={styles.navitem}>Contact</a></Link>
                 </div>
             </div>
+            <div className={styles.clearFix}></div>
         </>
     )
 }
