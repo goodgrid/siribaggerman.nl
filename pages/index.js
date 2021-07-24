@@ -22,7 +22,11 @@ const Home = ( props, error ) => {
             slide: number
         });
     }
-    console.log(props)
+
+    function tellme() {
+        alert("test")
+    }
+
     return (
         <>
             <Header />
@@ -30,7 +34,7 @@ const Home = ( props, error ) => {
 
                 <div>
 
-                {props.works.reverse().map((work, index) =>
+                {props.works.map((work, index) =>
                     <div key={index} className={styles.workContainer} >
                     <a href="#" onClick={() => openLightboxOnSlide(index+1)}>
                         <Image
@@ -49,9 +53,10 @@ const Home = ( props, error ) => {
                 <FsLightbox
                     toggler={toggler.toggler}
                     slide={toggler.slide}
-                    sources={props.works.reverse().map(work => {
+                    sources={props.works.map(work => {
                         return Config.strapiHost + work.Images.large.url
                     })}
+                    captions={['test1','test2','test3','test4','test5','test6']}
                 />
                 </div>
             </main>
