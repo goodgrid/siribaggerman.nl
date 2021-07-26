@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, {useState} from "react";
 import FsLightbox from 'fslightbox-react';
 import Header from "../components/header.js";
+import Footer from "../components/footer.js";
 import { Config } from "../components/config.js";
 
 
@@ -45,7 +46,6 @@ const Home = ( props, error ) => {
                             blurDataURL={Config.strapiHost + work.Images.thumbnail.url}
                             width="500"
                             height={500*work.Images.small.height/work.Images.small.width}
-                            layout="intrinsic"
                         />
                     </a>
                     </div>
@@ -60,6 +60,10 @@ const Home = ( props, error ) => {
                 />
                 </div>
             </main>
+            <span className={styles.indextext}>
+                Siri studeerde in 2005 af aan de Hogeschool voor de Kunsten in Utrecht. De jaren daarna woonde en werkte ze in Helsinki, Berlijn en Utrecht. Vanaf 2009 richtte ze zich op het medium film en performance. Sinds 2020 richt ze zich weer op haar oorspronkelijke discipline, schilderen.
+            </span>
+            <Footer/>
         </>
     );
     if (error) {

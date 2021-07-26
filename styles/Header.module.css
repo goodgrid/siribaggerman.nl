@@ -14,6 +14,7 @@
     height: 80px;
     float: left;
     margin-left: 100px;
+
 }
 
 .rightHeader {
@@ -35,7 +36,7 @@
     padding: 10px;
     font-size:1.2em;
     text-align: center;
-    font-variant: small-caps;
+    text-transform: lowercase;
 
 
 }
@@ -56,4 +57,11 @@
 .navitem:hover:after {
     transform: scaleX(1);
     transform-origin: bottom left;
+}
+
+@media screen and (max-width: 600px) {
+    .rightHeader {
+        display:none;
+    }
+
 }

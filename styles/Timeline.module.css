@@ -26,6 +26,7 @@
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
+
 }
 
 /* The actual timeline (the vertical ruler) */
@@ -33,7 +34,7 @@
     content: '';
     position: absolute;
     width: 6px;
-    background-color: white;
+    background-color: #ccff00;
     top: 0;
     bottom: 0;
     left: 50%;
@@ -42,13 +43,10 @@
 
 /* Container around content */
 .container {
-    padding: 10px 50px;
+    padding: 10px 10px;
     position: relative;
     background-color: inherit;
     width: 50%;
-
-
-    border: 1px solid red;
 }
 
 /* The circles on the timeline */
@@ -58,8 +56,8 @@
     width: 25px;
     height: 25px;
     right: -17px;
-    background-color: #61D4E8;
-    border: 4px solid #2DA1E7;
+    background-color: #ccff00;
+    border: 4px solid #ccff00;
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -67,9 +65,7 @@
 
 /* Place the container to the left */
 .left {
-    border: 1px solid red;
     left: 0;
-
 }
 
 /* Place the container to the right */
@@ -89,6 +85,7 @@
     border: medium solid white;
     border-width: 10px 0 10px 10px;
     border-color: transparent transparent transparent white;
+
 }
 
 /* Add arrows to the right container (pointing left) */
@@ -103,6 +100,7 @@
     border: medium solid white;
     border-width: 10px 10px 10px 0;
     border-color: transparent white transparent transparent;
+
 }
 
 /* Fix the circle for containers on the right side */
@@ -116,10 +114,13 @@
 
 /* The actual content */
 .content {
-    padding: 20px 30px;
+    width: 70%;
+    border: 1px solid #ccff00;
+    padding: 20px 50px;
     background-color: white;
     position: relative;
     border-radius: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /* Media queries - Responsive timeline on screens less than 600px wide */

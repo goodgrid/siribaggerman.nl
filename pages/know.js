@@ -5,13 +5,20 @@ import Image from "next/image";
 import axios from "axios";
 import { Config } from "../components/config.js";
 
-
 const Timeline = (props, error) => {
 
     return (
         <>
         <Header />
-        <div className={styles.avatar}><Image src={`${Config.strapiHost}${props.avatar.url}`} width="110" height="110"/></div>
+        <div className={styles.avatar}>
+            <Image
+                src={`${Config.strapiHost}${props.avatar.formats.thumbnail.url}`}
+                placeholder="blur"
+                blurDataURL={`${Config.strapiHost}${props.avatar.formats.thumbnail.url}`}
+                width="110"
+                height="110"
+            />
+        </div>
         <div className={styles.timeline}>
             {props.experiences.map((experience, index) =>
                 <div key={index} className={ styles.container + " " + ((index % 2 == 0)?styles.left:styles.right) }>
@@ -25,11 +32,11 @@ const Timeline = (props, error) => {
 
     )
     if (error) {
+        console.log("ERROR: " + error.message)
         return <div>An error occured: {error.message}</div>;
     }
 
 }
-
 
 Timeline.getInitialProps = async ctx => {
     try {
