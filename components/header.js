@@ -4,6 +4,7 @@ import Link from "next/link";
 import Script from "next/script";
 import React, {useState} from "react";
 import axios from 'axios';
+import { Config } from "../components/config.js";
 
 const Header = ({ menuItems, error }) => {
 
@@ -21,9 +22,9 @@ const Header = ({ menuItems, error }) => {
                   _paq.push(['trackPageView']);
                   _paq.push(['enableLinkTracking']);
                   (function() {
-                    var u="//goodgrid.nl/matomo/";
+                    var u="${Config.matomoHost}";
                     _paq.push(['setTrackerUrl', u+'matomo.php']);
-                    _paq.push(['setSiteId', '3']);
+                    _paq.push(['setSiteId', '${Config.matomoSiteId}']);
                     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                     g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
                   })();
