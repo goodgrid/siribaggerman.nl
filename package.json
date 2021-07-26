@@ -17,6 +17,6 @@
   "devDependencies": {
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
-    "fslightbox-react": "file:../../Downloads/fslightbox-react-pro-1.5.1.tgz"
+    "fslightbox-react": "file:./libs/fslightbox-react-pro-1.5.1.tgz"
   }
 }
