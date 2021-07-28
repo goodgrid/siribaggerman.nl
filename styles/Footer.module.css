@@ -2,3 +2,14 @@
 .container {
     text-align: center;
 }
+
+.clearFix {
+    content: "";
+    display: table;
+    clear: both;
+
+}
+
+.ruler {
+    color: silver;
+}

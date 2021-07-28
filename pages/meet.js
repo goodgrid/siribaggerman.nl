@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../styles/Contact.module.css";
 import Header from "../components/header.js";
+import Footer from "../components/footer.js";
 import Image from "next/image";
 import axios from "axios";
 import { Config } from "../components/config.js";
@@ -21,7 +22,7 @@ const Contact = (props, error) => {
                     height={props.contact.Locatie.formats.small.height}
                 />
             </div>
-
+            <Footer/>
         </>
 
     )

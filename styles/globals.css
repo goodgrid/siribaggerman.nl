@@ -2,7 +2,7 @@
 /* assuming the fonts were stored in public/fonts */
 
 @font-face {
-    font-family: 'catamaran';
+    font-family: 'JosefinSans';
     src:    url('/fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
     font-weight: 100;
     font-style: normal;
@@ -10,7 +10,7 @@
 
 body {
     background-color: #e4d1d1;
-    font-family: 'catamaran';
+    font-family: 'JosefinSans';
     font-size: 1.1em;
     color: dimgray;
 }
