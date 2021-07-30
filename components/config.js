@@ -1,7 +1,7 @@
 
 export const Config = {
-    strapiHost: "https://goodgrid-strapi.sloppy.zone",
-    matomoHost: "https://goodgrid.nl/matomo/",
-    matomoSiteId: 3
+    strapiHost: process.env.strapiHost, //"https://goodgrid-strapi.sloppy.zone",
+    matomoHost: process.env.matomoHost,//"https://goodgrid.nl/matomo/",
+    matomoSiteId: process.env.matomoSiteId //3
 }
 
