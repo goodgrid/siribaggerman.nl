@@ -64,8 +64,29 @@
 }
 
 @media screen and (max-width: 600px) {
-    .rightHeader {
-        display:none;
+    .leftHeader {
+        width: 40%;
+        margin-left: 0px;
+
     }
+    .rightHeader {
+        width:60%;
+        align-items: right;
+        margin-right: 0px;
+    }
+    .navigation {
+        position: relative;
+        float: right;
+    }
+
+    .navigation > * {
+        display: block;
+        float:none;
+        right: 0px;
+        padding: 0px;
+        text-align: right;
+    }
+
+
 
 }

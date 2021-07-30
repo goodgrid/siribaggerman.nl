@@ -1,13 +1,13 @@
 .contactdetails {
     padding-top: 50px;
-    position: absolute;
+    display:block;
     float: left;
     left: 200px;
 }
 
 .locatie {
     padding-top: 50px;
-    position: absolute;
+    display:block;
     float: right;
     right: 200px;
 }
