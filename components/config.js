@@ -4,7 +4,3 @@ export const Config = {
     matomoHost: ((process.env.matomoHost!==undefined)?process.env.matomoHost:"https://goodgrid.nl/matomo/"),
     matomoSiteId: ((process.env.matomoSiteId!==undefined)?process.env.matomoSiteId:3)
 }
-
-
-console.log(Config);
-console.log(process.env)
