@@ -7,3 +7,4 @@ export const Config = {
 
 
 console.log(Config);
+console.log(process.env)
