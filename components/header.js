@@ -15,7 +15,7 @@ const Header = ({ menuItems, error }) => {
                 <meta name="description" content="Siri Baggerman, Beeldend Kunstenaar" />
                 <link rel="icon" href="/favicon.png" />
             </Head>
-            <Script src="https://goodgrid.nl/matomo/matomo.js" strategy="lazyOnload"/>
+            <Script src="{Config.matomoHost}matomo.js" strategy="lazyOnload"/>
             <Script strategy="lazyOnload">{`
                   var _paq = window._paq = window._paq || [];
                   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
