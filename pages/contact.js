@@ -20,6 +20,7 @@ const Contact = (props, error) => {
                     src={`${Config.strapiHost}${props.contact.Locatie.formats.small.url}`}
                     width={props.contact.Locatie.formats.small.width}
                     height={props.contact.Locatie.formats.small.height}
+                    alt="locatie atelier"
                 />
             </div>
             <Footer/>

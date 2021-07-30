@@ -56,7 +56,9 @@ const Home = ( props, error ) => {
                     sources={props.works.map(work => {
                         return Config.strapiHost + work.Images.large.url
                     })}
-                    captions={['test1','test2','test3','test4','test5','test6']}
+                    captions={props.works.map(work => {
+                        return work.Title
+                    })}
                 />
                 </div>
             </main>
@@ -80,7 +82,7 @@ Home.getInitialProps = async ctx => {
                 Title: work.Title,
                 Images: work.Image.formats
             }
-        })
+        }).reverse()
 
         return { works };
     } catch (error) {

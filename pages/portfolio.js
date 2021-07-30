@@ -23,20 +23,23 @@ const Timeline = (props, error) => {
         <div className={styles.timeline}>
             {props.experiences.map((experience, index) =>
                 <div key={index} className={ styles.container + " " + ((index % 2 == 0)?styles.left:styles.right) }>
+                    
                     <div className={styles.content}>
-                        <div className={styles.experienceDescription}>{experience.Description}</div>
+                        <div className={styles.experienceDescription}>{experience.Description}</div>    
                         {(() => {
                             if (experience.Content !== null) {
-                                return <div className={styles.experienceImage} ><Image
-                                    src={`${Config.strapiHost}${experience.Content.small.url}`}
-                                    layout="responsive"
+                                return <div className={styles.experienceImage} style={{position: "relative", width:"100%", "min-height":"300px", backgroundColor: "lightgray"}}><Image
+                                    src={`${Config.strapiHost}${(experience.Content.small!==undefined)?experience.Content.small.url:experience.Content.thumbnail.url}`}
+                                    layout='fill'
+                                    objectFit='contain'
                                     alt={experience.Description}
-                                    width="100%"
-                                    height="100%"
                                 /></div>
                             }
                         })()}
-                        <div className={styles.experienceType}>{experience.typeSubtype}</div>
+                        <div className={styles.experienceBottom}>
+                            <div className={styles.experienceType}>{experience.Type.replace("_"," // ")}</div>
+                            <div className={styles.experienceYear}>{(new Date(experience.Date).getFullYear())}</div>
+                        </div>
                     </div>
                 </div>
             )}
@@ -44,10 +47,6 @@ const Timeline = (props, error) => {
         <Footer/>
         </>
     )
-    if (error) {
-        console.error("ERROR: " + error.message)
-        return <div>An error occured: {error.message}</div>;
-    }
 }
 
 Timeline.getInitialProps = async ctx => {
@@ -57,6 +56,7 @@ Timeline.getInitialProps = async ctx => {
             return {
                 Description: experience.Description,
                 Date: experience.Date,
+                Type: experience.typeAndSubtype,
                 Content: ((experience.Content===null)?null:experience.Content.formats)
             }
         }).sort((exp1, exp2) => {

@@ -40,8 +40,8 @@ const Header = ({ menuItems, error }) => {
                 <div className={styles.rightHeader}>
                     <nav className={styles.navigation}>
                         <Link href="/"><a className={styles.navitem}>Current work</a></Link>
-                        <Link href="/know"><a className={styles.navitem}>Portfolio</a></Link>
-                        <Link href="/meet"><a className={styles.navitem}>Contact</a></Link>
+                        <Link href="/portfolio"><a className={styles.navitem}>Portfolio</a></Link>
+                        <Link href="/contact"><a className={styles.navitem}>Contact</a></Link>
                     </nav>
                 </div>
             </div>
