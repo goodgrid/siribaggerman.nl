@@ -19,6 +19,7 @@
     height: 80px;
     float: left;
     margin-left: 100px;
+    margin-bottom: 10px;
 }
 
 .rightHeader {
@@ -29,7 +30,7 @@
     text-align: right;
     align-items: center;
     margin-right: 100px;
-    vertical-align: middle;
+    margin-bottom: 1px;
 }
 
 .navitem {
@@ -86,7 +87,11 @@
         padding: 0px;
         text-align: right;
     }
-
+    .navitem {
+        line-height:20px;
+        padding: 10px;
+        vertical-align: right;
+    }
 
 
 }

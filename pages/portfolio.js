@@ -28,7 +28,7 @@ const Timeline = (props, error) => {
                         <div className={styles.experienceDescription}>{experience.Description}</div>    
                         {(() => {
                             if (experience.Content !== null) {
-                                return <div className={styles.experienceImage} style={{position: "relative", width:"100%", "minHeight":"300px", backgroundColor: "lightgray"}}><Image
+                                return <div className={styles.experienceImage} style={{position: "relative", width:"100%", "minHeight":"200px", backgroundColor: "lightgray"}}><Image
                                     src={`${Config.strapiHost}${(experience.Content.small!==undefined)?experience.Content.small.url:experience.Content.thumbnail.url}`}
                                     layout='fill'
                                     objectFit='contain'
