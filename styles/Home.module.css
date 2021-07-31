@@ -17,6 +17,29 @@
 
 .workImage {
   border: 3px solid #ccff00 !important;
+  position: relative;
+}
+
+.workSoldIndicator {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #ccff00;
+  
+
+
+  position: relative;
+  left: 10px;
+  bottom: 35px;
+  z-index: 1000;
+
+  font-size: 0.08em;
+  text-align: justify;
+  line-height: 15px;
+}
+
+.workCaption {
+  color: #ccff00;
 }
 
 .footer {

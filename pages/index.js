@@ -47,6 +47,12 @@ const Home = ( props, error ) => {
                             width="500"
                             height={500*work.Images.small.height/work.Images.small.width}
                         />
+                        {(() => {
+                            if (work.Status == "Sold") {
+                                return <div className={styles.workSoldIndicator} >sold</div>
+                            }
+                        })()}
+                        
                     </a>
                     </div>
                 )}
@@ -57,7 +63,12 @@ const Home = ( props, error ) => {
                         return Config.strapiHost + work.Images.large.url
                     })}
                     captions={props.works.map(work => {
-                        return work.Title
+                        return <div key={work.Title} className={styles.workCaption}>
+                            <h3>{work.Title}</h3>
+                            <hr/>
+                            <p>Materiaal: {work.Material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.Sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.Price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.Status}</p>
+                            
+                        </div>
                     })}
                 />
                 </div>
@@ -80,7 +91,11 @@ Home.getInitialProps = async ctx => {
         const works = res.data.map(work => {
             return {
                 Title: work.Title,
-                Images: work.Image.formats
+                Images: work.Image.formats,
+                Status: work.Status,
+                Sizes: work.Sizes,
+                Material: work.Material,
+                Price: work.Price
             }
         }).reverse()
 
