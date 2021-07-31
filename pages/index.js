@@ -66,7 +66,7 @@ const Home = ( props, error ) => {
                         return <div key={work.Title} className={styles.workCaption}>
                             <h3>{work.Title}</h3>
                             <hr/>
-                            <p>Materiaal: {work.Material} // Formaat: {work.Sizes} // Prijs: {work.Price} // Status: {work.Status}</p>
+                            <p>Materiaal: {work.Material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.Sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.Price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.Status}</p>
                             
                         </div>
                     })}
