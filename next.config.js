@@ -9,6 +9,6 @@ module.exports = {
     return config
   },
   images: {
-    domains: ['goodgrid-strapi.sloppy.zone'],
+    domains: ['localhost','goodgrid-strapi.sloppy.zone'],
   }
 }

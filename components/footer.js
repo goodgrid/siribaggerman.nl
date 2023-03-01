@@ -9,7 +9,7 @@ const Footer = ({ props, error }) => {
                 <hr noshade="true" className={styles.ruler}/>
             </div>
             <div className={styles.container}>
-                    &copy; {(new Date()).getFullYear()} Siri Baggerman
+                    &copy; 1978-{(new Date()).getFullYear()} Siri Baggerman
             </div>
         </>
     )

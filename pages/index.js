@@ -6,7 +6,8 @@ import FsLightbox from 'fslightbox-react';
 import Header from "../components/header.js";
 import Footer from "../components/footer.js";
 import { Config } from "../components/config.js";
-
+import Story from "../components/story.js";
+import Link from "next/link"
 
 
 
@@ -37,18 +38,18 @@ const Home = ( props, error ) => {
 
                 {props.works.map((work, index) =>
                     <div key={index} className={styles.workContainer} >
-                    <a href="#" onClick={() => openLightboxOnSlide(index+1)}>
+                    <a href={"#" + work.title} onClick={() => openLightboxOnSlide(index+1)}>
                         <Image
                             className={styles.workImage}
-                            src={Config.strapiHost + work.Images.small.url}
-                            alt={work.Title}
+                            src={Config.strapiHost + work.images.small.url}
+                            alt={work.title}
                             placeholder="blur"
-                            blurDataURL={Config.strapiHost + work.Images.thumbnail.url}
+                            blurDataURL={Config.strapiHost + work.images.thumbnail.url}
                             width="500"
-                            height={500*work.Images.small.height/work.Images.small.width}
+                            height={500*work.images.small.height/work.images.small.width}
                         />
                         {(() => {
-                            if (work.Status == "Sold") {
+                            if (work.status == "Sold") {
                                 return <div className={styles.workSoldIndicator} >sold</div>
                             }
                         })()}
@@ -60,14 +61,13 @@ const Home = ( props, error ) => {
                     toggler={toggler.toggler}
                     slide={toggler.slide}
                     sources={props.works.map(work => {
-                        return Config.strapiHost + work.Images.large.url
+                        return Config.strapiHost + work.images.large.url
                     })}
                     captions={props.works.map(work => {
-                        return <div key={work.Title} className={styles.workCaption}>
-                            <h3>{work.Title}</h3>
-                            <hr/>
-                            <p>Materiaal: {work.Material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.Sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.Price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.Status}</p>
-                            
+                        return <div key={work.title} className={styles.workCaption}>
+                            <h3>{work.title} <Story/></h3> 
+                            <hr noshde="true"/>
+                            <p>Materiaal: {work.material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.status}</p>
                         </div>
                     })}
                 />
@@ -86,21 +86,24 @@ const Home = ( props, error ) => {
 
 Home.getInitialProps = async ctx => {
     try {
+        
         console.log(`Getting WORKS at ${Config.strapiHost}`)
-        const res = await axios.get(`${Config.strapiHost}/works`);
-        const works = res.data.map(work => {
+        const res = await axios.get(`${Config.strapiHost}/api/works?populate=Image`);
+
+        const works = res.data.data.map(work => {
             return {
-                Title: work.Title,
-                Images: work.Image.formats,
-                Status: work.Status,
-                Sizes: work.Sizes,
-                Material: work.Material,
-                Price: work.Price
+                title: work.attributes.Title,
+                images:  work.attributes.Image.data.attributes.formats,
+                status: work.attributes.Status,
+                sizes: work.attributes.Sizes,
+                material: work.attributes.Material,
+                price: work.attributes.Price
             }
         }).reverse()
 
         return { works };
     } catch (error) {
+        console.log("ERROR", error.message)
         return { error };
     }
 };

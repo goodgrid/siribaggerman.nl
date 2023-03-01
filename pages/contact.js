@@ -12,14 +12,14 @@ const Contact = (props, error) => {
         <>
             <Header />
             <div className={styles.contactdetails}>
-                <p>{props.contact.Telefoonnummer}</p>
-                <p>{props.contact.Emailadres}</p>
+                <p>{props.telefoonnummer}</p>
+                <p>{props.emailadres}</p>
             </div>
             <div className={styles.locatie}>
                 <Image
-                    src={`${Config.strapiHost}${props.contact.Locatie.formats.small.url}`}
-                    width={props.contact.Locatie.formats.small.width}
-                    height={props.contact.Locatie.formats.small.height}
+                    src={`${Config.strapiHost}${props.locatie.data.attributes.formats.small.url}`}
+                    width={props.locatie.data.attributes.formats.small.width}
+                    height={props.locatie.data.attributes.formats.small.height}
                     alt="locatie atelier"
                 />
             </div>
@@ -36,9 +36,9 @@ const Contact = (props, error) => {
 
 Contact.getInitialProps = async ctx => {
     try {
-        const resContact = await axios.get(`${Config.strapiHost}/contact-details`);
-        const contact = resContact.data;
-        return { contact };
+        const res = await axios.get(`${Config.strapiHost}/api/contact-detail?populate=locatie`)
+        
+        return res.data.data.attributes
     } catch (error) {
         return { error };
     }
