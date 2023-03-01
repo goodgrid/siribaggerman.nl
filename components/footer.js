@@ -6,7 +6,7 @@ const Footer = ({ props, error }) => {
     return (
         <>
             <div className={styles.clearFix}>
-                <hr noshade="true" className={styles.ruler}/>
+                
             </div>
             <div className={styles.container}>
                     &copy; 1978-{(new Date()).getFullYear()} Siri Baggerman

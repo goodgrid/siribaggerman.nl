@@ -66,7 +66,7 @@ const Home = ( props, error ) => {
                     captions={props.works.map(work => {
                         return <div key={work.title} className={styles.workCaption}>
                             <h3>{work.title} <Story/></h3> 
-                            <hr noshde="true"/>
+                            
                             <p>Materiaal: {work.material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.status}</p>
                         </div>
                     })}
