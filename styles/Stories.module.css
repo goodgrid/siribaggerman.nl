@@ -1,0 +1,21 @@
+.storyContainer {
+    margin: 0 auto;
+    width: 50%;
+    
+}
+
+.languageSelection {
+    float: right;
+}
+
+.storyImageLeft {
+    border: 0.05px solid #ccff00;
+    margin: 20px;
+    float: left
+}
+
+.storyImageRight {
+    border: 0.05px solid #ccff00;
+    margin: 20px;
+    float: right
+}

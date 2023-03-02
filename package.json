@@ -9,10 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.3",
+    "micromark": "^3.0.2",
     "next": "11.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-markdown": "^6.0.3",
+    "remark-parse": "^9.0.0",
+    "remark-react": "^8.0.0",
+    "unified": "^10.1.0"
   },
   "devDependencies": {
     "eslint": "7.31.0",
