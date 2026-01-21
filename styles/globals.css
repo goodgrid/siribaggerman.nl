@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import "react-image-gallery/styles/css/image-gallery.css";
 
 /* Fix React Image Gallery positioning */
@@ -60,8 +61,6 @@
 
 /* this is an abbreviated version of @font-face, meant to show how to reference the font in the relative url attribute.
 /* assuming the fonts were stored in public/fonts */
-
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
 @font-face {
     font-family: 'JosefinSans';

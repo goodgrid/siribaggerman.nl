@@ -8,6 +8,7 @@ module.exports = {
     }
     return config
   },
+  turbopack: {}, // Empty turbopack config to silence the error
   images: {
     unoptimized: true,
     remotePatterns: [
