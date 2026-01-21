@@ -130,17 +130,17 @@ const Home = ( props, error ) => {
 
                 <div>
 
-                {props.works.map((work, index) =>
+                {props.works.filter(work => work.images?.small?.url || work.images?.medium?.url || work.images?.large?.url).map((work, index) =>
                     <div key={index} className={styles.workContainer} >
                     <a href="#" onClick={(e) => { e.preventDefault(); openGallery(index + 1); }}>
                         <Image
                             className={styles.workImage}
-                            src={Config.strapiHost + work.images.small.url}
-                            alt={work.title}
+                            src={work.images?.small?.url ? Config.strapiHost + work.images.small.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : Config.strapiHost + work.images.large.url}
+                            alt={work.title || 'Artwork'}
                             placeholder="blur"
-                            blurDataURL={Config.strapiHost + work.images.thumbnail.url}
+                            blurDataURL={work.images?.thumbnail?.url ? Config.strapiHost + work.images.thumbnail.url : '/placeholder-blur.jpg'}
                             width="500"
-                            height={500*work.images.small.height/work.images.small.width}
+                            height={work.images?.small?.height ? 500*work.images.small.height/work.images.small.width : work.images?.medium?.height ? 500*work.images.medium.height/work.images.medium.width : 500*work.images.large.height/work.images.large.width}
                         />
                         {(() => {
                             if (work.status == "Sold") {
@@ -154,11 +154,11 @@ const Home = ( props, error ) => {
                 {/* Conditionele ImageGallery */}
                 {galleryOpen && props.works && props.works.length > 0 && (
                     <ImageGallery
-                        items={props.works.map(work => ({
-                            original: Config.strapiHost + work.images.large.url,
-                            thumbnail: Config.strapiHost + work.images.thumbnail.url,
-                            title: work.title,
-                            description: `Material: ${work.material} | Size: ${work.sizes} | Price: ${work.price} | Status: ${work.status}`
+                        items={props.works.filter(work => work.images?.large?.url).map(work => ({
+                            original: work.images?.large?.url ? Config.strapiHost + work.images.large.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : '/placeholder-large.jpg',
+                            thumbnail: work.images?.thumbnail?.url ? Config.strapiHost + work.images.thumbnail.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : '/placeholder-thumb.jpg',
+                            title: work.title || 'Untitled',
+                            description: `Material: ${work.material || 'Unknown'} | Size: ${work.sizes || 'Unknown'} | Price: ${work.price || 'Unknown'} | Status: ${work.status || 'Unknown'}`
                         }))}
                         startIndex={galleryIndex}
                         showPlayButton={false}
@@ -227,17 +227,23 @@ Home.getInitialProps = async ctx => {
         
         console.log(`Getting WORKS at ${Config.strapiHost}`)
         const res = await axios.get(`${Config.strapiHost}/api/works?populate=Image&pagination[pageSize]=100`);
+        
+        // Debug: log de data structuur
+        console.log("Strapi response:", JSON.stringify(res.data.data[0], null, 2));
 
         const works = res.data.data.map(work => {
             return {
                 title: work.attributes.Title,
-                images:  work.attributes.Image.data.attributes.formats,
+                images: work.attributes.Image?.data?.attributes?.formats || {},
                 status: work.attributes.Status,
                 sizes: work.attributes.Sizes,
                 material: work.attributes.Material,
                 price: work.attributes.Price
             }
         }).reverse()
+        
+        // Debug: log de mapped data
+        console.log("Mapped works:", JSON.stringify(works[0], null, 2));
 
         return { works };
     } catch (error) {
