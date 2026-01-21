@@ -12,23 +12,10 @@ const Header = ({ menuItems, error }) => {
         <>
             <Head>
                 <title>Siri Baggerman</title>
-                <meta name="description" content="Siri Baggerman, Beeldend Kunstenaar" />
+                <meta name="description" content="Siri Baggerman, Visual Artist" />
                 <link rel="icon" href="/favicon.png" />
             </Head>
-            <Script src="{Config.matomoHost}matomo.js" strategy="lazyOnload"/>
-            <Script strategy="lazyOnload">{`
-                  var _paq = window._paq = window._paq || [];
-                  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-                  _paq.push(['trackPageView']);
-                  _paq.push(['enableLinkTracking']);
-                  (function() {
-                    var u="${Config.matomoHost}";
-                    _paq.push(['setTrackerUrl', u+'matomo.php']);
-                    _paq.push(['setSiteId', '${Config.matomoSiteId}']);
-                    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                    g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-                  })();     
-            `}</Script>
+            <Script defer src="https://cloud.umami.is/script.js" data-website-id={Config.umamiWebsiteId} strategy="lazyOnload"/>
 
             <div className={styles.container}>
                 <div className={styles.leftHeader}>
@@ -38,9 +25,9 @@ const Header = ({ menuItems, error }) => {
                 </div>
                 <div className={styles.rightHeader}>
                     <nav className={styles.navigation}>
-                        <Link href="/"><a className={styles.navitem}>Current work</a></Link>
-                        <Link href="/portfolio"><a className={styles.navitem}>Portfolio</a></Link>
-                        <Link href="/contact"><a className={styles.navitem}>Contact</a></Link>
+                        <Link href="/" className={styles.navitem}>Current work</Link>
+                        <Link href="/portfolio" className={styles.navitem}>Portfolio</Link>
+                        <Link href="/contact" className={styles.navitem}>Contact</Link>
                     </nav>
                 </div>
             </div>

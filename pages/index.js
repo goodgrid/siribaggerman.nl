@@ -1,33 +1,127 @@
 import styles from "../styles/Home.module.css";
 import axios from 'axios';
 import Image from "next/image";
-import React, {useState} from "react";
-import FsLightbox from 'fslightbox-react';
+import React, {useState, useEffect} from "react";
+import ImageGallery from "react-image-gallery";
 import Header from "../components/header.js";
 import Footer from "../components/footer.js";
 import { Config } from "../components/config.js";
 import Story from "../components/story.js";
-import Link from "next/link"
+import Link from "next/link";
 
-
+// Umami tracking helper
+const trackEvent = (eventName, eventData = {}) => {
+    if (typeof window !== 'undefined' && window.umami) {
+        window.umami.track(eventName, eventData);
+    }
+};
 
 const Home = ( props, error ) => {
 
-    const [toggler, setToggler] = React.useState({
-        toggler: false,
-        sourceIndex: 0
-    });
-
-    function openLightboxOnSlide(number) {
-        setToggler({
-            toggler: !toggler.toggler,
-            slide: number
-        });
+    if (error) {
+        return <div>An error occured: {error.message}</div>;
     }
 
-    function tellme() {
-        alert("test")
+    if (!props.works) {
+        return <div>Loading...</div>;
     }
+
+    // ImageGallery state
+    const [galleryOpen, setGalleryOpen] = useState(false);
+    const [galleryIndex, setGalleryIndex] = useState(0);
+    const [viewStartTime, setViewStartTime] = useState(null);
+    const [timerInterval, setTimerInterval] = useState(null);
+
+    function openGallery(number) {
+        console.log("Opening gallery at index:", number - 1);
+        const workTitle = props.works[number - 1]?.title || 'Unknown';
+        const workData = {
+            work_index: number - 1, 
+            work_title: workTitle,
+            total_works: props.works.length,
+            image_name: workTitle
+        };
+        
+        trackEvent('lightbox_open', workData);
+        setGalleryIndex(number - 1);
+        setGalleryOpen(true);
+        setViewStartTime(Date.now());
+        
+        // Start 10-second timer tracking
+        startTimerTracking(workData);
+    }
+
+    function closeGallery() {
+        console.log("Closing gallery");
+        const workTitle = props.works[galleryIndex]?.title || 'Unknown';
+        const workData = {
+            current_index: galleryIndex,
+            work_title: workTitle,
+            image_name: workTitle,
+            time_open: Date.now() - viewStartTime
+        };
+        
+        trackEvent('lightbox_close', workData);
+        setGalleryOpen(false);
+        setGalleryIndex(0);
+        setViewStartTime(null);
+        
+        // Stop timer tracking
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            setTimerInterval(null);
+        }
+    }
+
+    function startTimerTracking(workData) {
+        let secondsViewed = 0;
+        const interval = setInterval(() => {
+            secondsViewed += 10;
+            trackEvent('lightbox_view_duration', {
+                ...workData,
+                seconds_viewed: secondsViewed,
+                duration_formatted: `${secondsViewed}s`
+            });
+        }, 10000);
+        
+        setTimerInterval(interval);
+    }
+
+    // Scroll tracking
+    useEffect(() => {
+        let scrollTimeout;
+        const handleScroll = () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollPercentage = Math.round(
+                    (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+                );
+                
+                if (scrollPercentage > 25 && scrollPercentage <= 50) {
+                    trackEvent('scroll_depth', { depth: '25%', page: 'home' });
+                } else if (scrollPercentage > 50 && scrollPercentage <= 75) {
+                    trackEvent('scroll_depth', { depth: '50%', page: 'home' });
+                } else if (scrollPercentage > 75 && scrollPercentage < 100) {
+                    trackEvent('scroll_depth', { depth: '75%', page: 'home' });
+                } else if (scrollPercentage >= 100) {
+                    trackEvent('scroll_depth', { depth: '100%', page: 'home' });
+                }
+            }, 1000);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(scrollTimeout);
+        };
+    }, []);
+
+    // Reset gallery on page load
+    useEffect(() => {
+        if (galleryOpen) {
+            closeGallery();
+        }
+    }, []);
 
     return (
         <>
@@ -38,7 +132,7 @@ const Home = ( props, error ) => {
 
                 {props.works.map((work, index) =>
                     <div key={index} className={styles.workContainer} >
-                    <a href={"#" + work.title} onClick={() => openLightboxOnSlide(index+1)}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); openGallery(index + 1); }}>
                         <Image
                             className={styles.workImage}
                             src={Config.strapiHost + work.images.small.url}
@@ -57,20 +151,67 @@ const Home = ( props, error ) => {
                     </a>
                     </div>
                 )}
-                <FsLightbox
-                    toggler={toggler.toggler}
-                    slide={toggler.slide}
-                    sources={props.works.map(work => {
-                        return Config.strapiHost + work.images.large.url
-                    })}
-                    captions={props.works.map(work => {
-                        return <div key={work.title} className={styles.workCaption}>
-                            <h3>{work.title} <Story/></h3> 
+                {/* Conditionele ImageGallery */}
+                {galleryOpen && props.works && props.works.length > 0 && (
+                    <ImageGallery
+                        items={props.works.map(work => ({
+                            original: Config.strapiHost + work.images.large.url,
+                            thumbnail: Config.strapiHost + work.images.thumbnail.url,
+                            title: work.title,
+                            description: `Material: ${work.material} | Size: ${work.sizes} | Price: ${work.price} | Status: ${work.status}`
+                        }))}
+                        startIndex={galleryIndex}
+                        showPlayButton={false}
+                        showFullscreenButton={false}
+                        showIndex={false}
+                        showThumbnails={false}
+                        showNav={true}
+                        isOpen={galleryOpen}
+                        onClose={closeGallery}
+                        onSlide={index => {
+                            setGalleryIndex(index);
+                            const workTitle = props.works[index]?.title || 'Unknown';
+                            const workData = {
+                                new_index: index, 
+                                work_title: workTitle,
+                                image_name: workTitle,
+                                direction: index > galleryIndex ? 'next' : 'previous'
+                            };
                             
-                            <p>Materiaal: {work.material} &nbsp;&frasl;&frasl;&nbsp; Formaat: {work.sizes} &nbsp;&frasl;&frasl;&nbsp; Prijs: {work.price} &nbsp;&frasl;&frasl;&nbsp; Status: {work.status}</p>
-                        </div>
-                    })}
-                />
+                            trackEvent('lightbox_navigate', workData);
+                            
+                            // Reset timer for new image
+                            if (timerInterval) {
+                                clearInterval(timerInterval);
+                            }
+                            startTimerTracking(workData);
+                        }}
+                        renderCustomControls={() => (
+                            <button 
+                                onClick={closeGallery}
+                                style={{
+                                    position: 'absolute',
+                                    top: '20px',
+                                    right: '20px',
+                                    background: 'rgba(0, 0, 0, 0.8)',
+                                    color: '#ccff00',
+                                    border: '2px solid #ccff00',
+                                    borderRadius: '50%',
+                                    width: '50px',
+                                    height: '50px',
+                                    fontSize: '24px',
+                                    cursor: 'pointer',
+                                    zIndex: 10000,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                ×
+                            </button>
+                        )}
+                    />
+                )}
                 </div>
             </main>
             <span className={styles.indextext}>
@@ -79,16 +220,13 @@ const Home = ( props, error ) => {
             <Footer/>
         </>
     );
-    if (error) {
-        return <div>An error occured: {error.message}</div>;
-    }
 };
 
 Home.getInitialProps = async ctx => {
     try {
         
         console.log(`Getting WORKS at ${Config.strapiHost}`)
-        const res = await axios.get(`${Config.strapiHost}/api/works?populate=Image`);
+        const res = await axios.get(`${Config.strapiHost}/api/works?populate=Image&pagination[pageSize]=100`);
 
         const works = res.data.data.map(work => {
             return {
@@ -104,7 +242,47 @@ Home.getInitialProps = async ctx => {
         return { works };
     } catch (error) {
         console.log("ERROR", error.message)
-        return { error };
+        // Fallback mock data wanneer Strapi niet draait
+        const mockWorks = [
+            {
+                title: "Test Artwork 1",
+                images: {
+                    small: { url: "/mock/small1.jpg", height: 300, width: 400 },
+                    large: { url: "/mock/large1.jpg", height: 600, width: 800 },
+                    thumbnail: { url: "/mock/thumb1.jpg", height: 100, width: 100 }
+                },
+                status: "Available",
+                sizes: "50x70 cm",
+                material: "Oil on canvas",
+                price: "€750"
+            },
+            {
+                title: "Test Artwork 2", 
+                images: {
+                    small: { url: "/mock/small2.jpg", height: 300, width: 400 },
+                    large: { url: "/mock/large2.jpg", height: 600, width: 800 },
+                    thumbnail: { url: "/mock/thumb2.jpg", height: 100, width: 100 }
+                },
+                status: "Sold",
+                sizes: "40x50 cm", 
+                material: "Acrylic on canvas",
+                price: "€550"
+            },
+            {
+                title: "Test Artwork 3",
+                images: {
+                    small: { url: "/mock/small3.jpg", height: 300, width: 400 },
+                    large: { url: "/mock/large3.jpg", height: 600, width: 800 },
+                    thumbnail: { url: "/mock/thumb3.jpg", height: 100, width: 100 }
+                },
+                status: "Available",
+                sizes: "60x80 cm",
+                material: "Mixed media", 
+                price: "€950"
+            }
+        ];
+        
+        return { works: mockWorks };
     }
 };
 

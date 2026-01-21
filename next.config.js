@@ -9,6 +9,24 @@ module.exports = {
     return config
   },
   images: {
-    domains: ['localhost','goodgrid-strapi.sloppy.zone','strapi-r5iq.onrender.com'],
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '1337',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'goodgrid-strapi.sloppy.zone',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'strapi-r5iq.onrender.com',
+        pathname: '/uploads/**',
+      },
+    ],
   }
 }

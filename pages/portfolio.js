@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "../styles/Timeline.module.css";
 import Header from "../components/header.js";
 import Footer from "../components/footer.js";
@@ -6,7 +6,43 @@ import Image from "next/image";
 import axios from "axios";
 import { Config } from "../components/config.js";
 
+// Umami tracking helper
+const trackEvent = (eventName, eventData = {}) => {
+    if (typeof window !== 'undefined' && window.umami) {
+        window.umami.track(eventName, eventData);
+    }
+};
+
 const Timeline = (props, error) => {
+
+    // Scroll tracking
+    useEffect(() => {
+        let scrollTimeout;
+        const handleScroll = () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollPercentage = Math.round(
+                    (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+                );
+                
+                if (scrollPercentage > 25 && scrollPercentage <= 50) {
+                    trackEvent('scroll_depth', { depth: '25%', page: 'portfolio' });
+                } else if (scrollPercentage > 50 && scrollPercentage <= 75) {
+                    trackEvent('scroll_depth', { depth: '50%', page: 'portfolio' });
+                } else if (scrollPercentage > 75 && scrollPercentage < 100) {
+                    trackEvent('scroll_depth', { depth: '75%', page: 'portfolio' });
+                } else if (scrollPercentage >= 100) {
+                    trackEvent('scroll_depth', { depth: '100%', page: 'portfolio' });
+                }
+            }, 1000);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(scrollTimeout);
+        };
+    }, []);
 
     return (
         <>
@@ -53,7 +89,7 @@ const Timeline = (props, error) => {
 
 Timeline.getInitialProps = async ctx => {
     try {
-        const resExp = await axios.get(`${Config.strapiHost}/api/experiences?populate=Content`)
+        const resExp = await axios.get(`${Config.strapiHost}/api/experiences?populate=Content&pagination[pageSize]=100`)
         
         const experiences = resExp.data.data.map(experience => {
             
@@ -68,7 +104,7 @@ Timeline.getInitialProps = async ctx => {
         })
         
        
-        const resAva = await axios.get(`${Config.strapiHost}/api/avatar?populate=Image`);
+        const resAva = await axios.get(`${Config.strapiHost}/api/avatar?populate=Image&pagination[pageSize]=100`);
         const avatar = resAva.data.data.attributes.Image
         
         

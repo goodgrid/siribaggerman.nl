@@ -40,6 +40,21 @@
 
 .workCaption {
   color: #ccff00;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.workCaption h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+}
+
+.workCaption p {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.4;
 }
 
 .footer {

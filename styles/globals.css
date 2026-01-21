@@ -1,5 +1,67 @@
+@import "react-image-gallery/styles/css/image-gallery.css";
+
+/* Fix React Image Gallery positioning */
+.image-gallery {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+}
+
+.image-gallery-content {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.image-gallery-slide-wrapper {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.image-gallery-slide {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.image-gallery-image {
+    max-height: 80vh !important;
+    max-width: 90vw !important;
+    object-fit: contain !important;
+}
+
+.image-gallery-description {
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: #ccff00 !important;
+    padding: 15px !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    max-width: 80% !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    position: absolute !important;
+}
+
+/* Custom close button hover effect */
+.image-gallery button:hover {
+    opacity: 0.8 !important;
+}
+
 /* this is an abbreviated version of @font-face, meant to show how to reference the font in the relative url attribute.
 /* assuming the fonts were stored in public/fonts */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
 @font-face {
     font-family: 'JosefinSans';
@@ -10,10 +72,15 @@
 
 body {
     background-color: #e4d1d1;
-    font-family: 'JosefinSans';
+    font-family: 'Manrope', sans-serif;
     font-size: 1.1em;
     color: dimgray;
     
+}
+
+/* Header keeps JosefinSans font */
+h1, .title {
+    font-family: 'JosefinSans' !important;
 }
 
 a {
