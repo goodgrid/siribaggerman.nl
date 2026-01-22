@@ -10,14 +10,45 @@
 
 .workContainer {
   display: flex;
-
+  justify-content: center;
+  align-items: center;
   padding: 10px;
-  width: 100%;
+  width: auto; /* Veranderd van 100% */
+  flex: none; /* Verwijder flex basis */
+  max-width: 500px; /* Max breedte */
 }
 
 .workImage {
   border: 3px solid #ccff00 !important;
   position: relative;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  aspect-ratio: auto !important;
+}
+
+/* Responsive voor mobiel */
+@media (max-width: 768px) {
+  .workContainer {
+    flex: none;
+    max-width: 100%;
+    padding: 5px;
+    width: auto;
+  }
+  
+  .workImage {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Voor tablets */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .workContainer {
+    flex: none;
+    max-width: 45%;
+    width: auto;
+  }
 }
 
 .workSoldIndicator {

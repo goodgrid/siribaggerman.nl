@@ -47,8 +47,25 @@ const Home = ( props, error ) => {
         setGalleryOpen(true);
         setViewStartTime(Date.now());
         
+        // Preload alle lightbox afbeeldingen
+        preloadGalleryImages();
+        
         // Start 10-second timer tracking
         startTimerTracking(workData);
+    }
+
+    function preloadGalleryImages() {
+        props.works.forEach(work => {
+            if (work.images?.large?.url) {
+                // Gebruik fetch voor preloading in plaats van new Image()
+                fetch(Config.strapiHost + work.images.large.url, { mode: 'no-cors' })
+                    .catch(() => {}); // Ignore errors
+            }
+            if (work.images?.medium?.url) {
+                fetch(Config.strapiHost + work.images.medium.url, { mode: 'no-cors' })
+                    .catch(() => {}); // Ignore errors
+            }
+        });
     }
 
     function closeGallery() {
@@ -128,7 +145,17 @@ const Home = ( props, error ) => {
             <Header />
             <main className={styles.main}>
 
-                <div>
+                <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '20px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    padding: '0 20px'
+                }}>
 
                 {props.works.filter(work => work.images?.small?.url || work.images?.medium?.url || work.images?.large?.url).map((work, index) =>
                     <div key={index} className={styles.workContainer} >
@@ -139,8 +166,14 @@ const Home = ( props, error ) => {
                             alt={work.title || 'Artwork'}
                             placeholder="blur"
                             blurDataURL={work.images?.thumbnail?.url ? Config.strapiHost + work.images.thumbnail.url : '/placeholder-blur.jpg'}
-                            width="500"
-                            height={work.images?.small?.height ? 500*work.images.small.height/work.images.small.width : work.images?.medium?.height ? 500*work.images.medium.height/work.images.medium.width : 500*work.images.large.height/work.images.large.width}
+                            width={work.images?.small?.width || work.images?.medium?.width || work.images?.large?.width || 500}
+                            height={work.images?.small?.height || work.images?.medium?.height || work.images?.large?.height || 500}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            style={{
+                                objectFit: 'cover',
+                                width: '100%',
+                                height: 'auto'
+                            }}
                         />
                         {(() => {
                             if (work.status == "Sold") {
@@ -158,7 +191,7 @@ const Home = ( props, error ) => {
                             original: work.images?.large?.url ? Config.strapiHost + work.images.large.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : '/placeholder-large.jpg',
                             thumbnail: work.images?.thumbnail?.url ? Config.strapiHost + work.images.thumbnail.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : '/placeholder-thumb.jpg',
                             title: work.title || 'Untitled',
-                            description: `Material: ${work.material || 'Unknown'} | Size: ${work.sizes || 'Unknown'} | Price: ${work.price || 'Unknown'} | Status: ${work.status || 'Unknown'}`
+                            description: "" // Leeg om dubbele caption te voorkomen
                         }))}
                         startIndex={galleryIndex}
                         showPlayButton={false}
@@ -166,6 +199,9 @@ const Home = ( props, error ) => {
                         showIndex={false}
                         showThumbnails={false}
                         showNav={true}
+                        showBullets={false}
+                        preloadNextImage={true}
+                        preloadPrevImage={true}
                         isOpen={galleryOpen}
                         onClose={closeGallery}
                         onSlide={index => {
@@ -187,28 +223,81 @@ const Home = ( props, error ) => {
                             startTimerTracking(workData);
                         }}
                         renderCustomControls={() => (
-                            <button 
-                                onClick={closeGallery}
-                                style={{
-                                    position: 'absolute',
-                                    top: '20px',
-                                    right: '20px',
-                                    background: 'rgba(0, 0, 0, 0.8)',
-                                    color: '#ccff00',
-                                    border: '2px solid #ccff00',
-                                    borderRadius: '50%',
-                                    width: '50px',
-                                    height: '50px',
-                                    fontSize: '24px',
-                                    cursor: 'pointer',
-                                    zIndex: 10000,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                                ×
-                            </button>
+                            <>
+                                <button 
+                                    onClick={closeGallery}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '20px',
+                                        right: '20px',
+                                        background: 'rgba(0, 0, 0, 0.8)',
+                                        color: '#ccff00',
+                                        border: '2px solid #ccff00',
+                                        borderRadius: '50%',
+                                        width: '50px',
+                                        height: '50px',
+                                        fontSize: '24px',
+                                        cursor: 'pointer',
+                                        zIndex: 10000,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    ×
+                                </button>
+                                {/* Custom caption buiten de afbeelding */}
+                                <div 
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '20px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        background: 'rgba(0, 0, 0, 0.9)',
+                                        color: '#ccff00',
+                                        padding: '20px 30px',
+                                        borderRadius: '12px',
+                                        width: '500px', // Vaste breedte
+                                        minWidth: '500px', // Minimum breedte
+                                        maxWidth: '500px', // Maximum breedte
+                                        textAlign: 'center',
+                                        zIndex: 9999,
+                                        fontSize: '16px',
+                                        lineHeight: '1.6',
+                                        border: '1px solid rgba(204, 255, 0, 0.3)'
+                                    }}
+                                >
+                                    <h3 style={{ 
+                                        margin: '0 0 10px 0', 
+                                        fontSize: '20px', 
+                                        fontWeight: 'bold',
+                                        color: '#ffffff'
+                                    }}>
+                                        {props.works[galleryIndex]?.title || 'Untitled'}
+                                    </h3>
+                                    <p style={{ 
+                                        margin: '0 0 5px 0',
+                                        fontSize: '14px',
+                                        opacity: '0.9'
+                                    }}>
+                                        Material: {props.works[galleryIndex]?.material || 'Unknown'} | 
+                                        Size: {props.works[galleryIndex]?.sizes || 'Unknown'}
+                                    </p>
+                                    <p style={{ 
+                                        margin: '0',
+                                        fontSize: '14px',
+                                        opacity: '0.9'
+                                    }}>
+                                        Price: {props.works[galleryIndex]?.price || 'Unknown'} | 
+                                        Status: <span style={{ 
+                                            color: props.works[galleryIndex]?.status === 'Sold' ? '#ff6b6b' : '#51cf66',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {props.works[galleryIndex]?.status || 'Unknown'}
+                                        </span>
+                                    </p>
+                                </div>
+                            </>
                         )}
                     />
                 )}
