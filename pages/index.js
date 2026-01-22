@@ -32,18 +32,20 @@ const Home = ( props, error ) => {
     const [viewStartTime, setViewStartTime] = useState(null);
     const [timerInterval, setTimerInterval] = useState(null);
 
-    function openGallery(number) {
-        console.log("Opening gallery at index:", number - 1);
-        const workTitle = props.works[number - 1]?.title || 'Unknown';
+    // Filter works met images voor consistentie
+    const filteredWorks = props.works.filter(work => work.images?.small?.url || work.images?.medium?.url || work.images?.large?.url);
+
+    function openGallery(index) {
+        const workTitle = filteredWorks[index]?.title || 'Unknown';
         const workData = {
-            work_index: number - 1, 
+            work_index: index, 
             work_title: workTitle,
-            total_works: props.works.length,
+            total_works: filteredWorks.length,
             image_name: workTitle
         };
         
         trackEvent('lightbox_open', workData);
-        setGalleryIndex(number - 1);
+        setGalleryIndex(index);
         setGalleryOpen(true);
         setViewStartTime(Date.now());
         
@@ -69,8 +71,7 @@ const Home = ( props, error ) => {
     }
 
     function closeGallery() {
-        console.log("Closing gallery");
-        const workTitle = props.works[galleryIndex]?.title || 'Unknown';
+        const workTitle = filteredWorks[galleryIndex]?.title || 'Unknown';
         const workData = {
             current_index: galleryIndex,
             work_title: workTitle,
@@ -157,9 +158,9 @@ const Home = ( props, error ) => {
                     padding: '0 20px'
                 }}>
 
-                {props.works.filter(work => work.images?.small?.url || work.images?.medium?.url || work.images?.large?.url).map((work, index) =>
+                {filteredWorks.map((work, index) =>
                     <div key={index} className={styles.workContainer} >
-                    <a href="#" onClick={(e) => { e.preventDefault(); openGallery(index + 1); }}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); openGallery(index); }}>
                         <Image
                             className={styles.workImage}
                             src={work.images?.small?.url ? Config.strapiHost + work.images.small.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : Config.strapiHost + work.images.large.url}
@@ -185,9 +186,9 @@ const Home = ( props, error ) => {
                     </div>
                 )}
                 {/* Conditionele ImageGallery */}
-                {galleryOpen && props.works && props.works.length > 0 && (
+                {galleryOpen && filteredWorks && filteredWorks.length > 0 && (
                     <ImageGallery
-                        items={props.works.filter(work => work.images?.large?.url).map(work => ({
+                        items={filteredWorks.map(work => ({
                             original: work.images?.large?.url ? Config.strapiHost + work.images.large.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : '/placeholder-large.jpg',
                             thumbnail: work.images?.thumbnail?.url ? Config.strapiHost + work.images.thumbnail.url : work.images?.small?.url ? Config.strapiHost + work.images.small.url : work.images?.medium?.url ? Config.strapiHost + work.images.medium.url : '/placeholder-thumb.jpg',
                             title: work.title || 'Untitled',
@@ -273,27 +274,27 @@ const Home = ( props, error ) => {
                                         fontWeight: 'bold',
                                         color: '#ffffff'
                                     }}>
-                                        {props.works[galleryIndex]?.title || 'Untitled'}
+                                        {filteredWorks[galleryIndex]?.title || 'Untitled'}
                                     </h3>
                                     <p style={{ 
                                         margin: '0 0 5px 0',
                                         fontSize: '14px',
                                         opacity: '0.9'
                                     }}>
-                                        Material: {props.works[galleryIndex]?.material || 'Unknown'} | 
-                                        Size: {props.works[galleryIndex]?.sizes || 'Unknown'}
+                                        Material: {filteredWorks[galleryIndex]?.material || 'Unknown'} | 
+                                        Size: {filteredWorks[galleryIndex]?.sizes || 'Unknown'}
                                     </p>
                                     <p style={{ 
                                         margin: '0',
                                         fontSize: '14px',
                                         opacity: '0.9'
                                     }}>
-                                        Price: {props.works[galleryIndex]?.price || 'Unknown'} | 
+                                        Price: {filteredWorks[galleryIndex]?.price || 'Unknown'} | 
                                         Status: <span style={{ 
-                                            color: props.works[galleryIndex]?.status === 'Sold' ? '#ff6b6b' : '#51cf66',
+                                            color: filteredWorks[galleryIndex]?.status === 'Sold' ? '#ff6b6b' : '#51cf66',
                                             fontWeight: 'bold'
                                         }}>
-                                            {props.works[galleryIndex]?.status || 'Unknown'}
+                                            {filteredWorks[galleryIndex]?.status || 'Unknown'}
                                         </span>
                                     </p>
                                 </div>
@@ -313,13 +314,8 @@ const Home = ( props, error ) => {
 
 Home.getInitialProps = async ctx => {
     try {
-        
-        console.log(`Getting WORKS at ${Config.strapiHost}`)
         const res = await axios.get(`${Config.strapiHost}/api/works?populate=Image&pagination[pageSize]=100`);
         
-        // Debug: log de data structuur
-        console.log("Strapi response:", JSON.stringify(res.data.data[0], null, 2));
-
         const works = res.data.data.map(work => {
             return {
                 title: work.attributes.Title,
@@ -330,13 +326,9 @@ Home.getInitialProps = async ctx => {
                 price: work.attributes.Price
             }
         }).reverse()
-        
-        // Debug: log de mapped data
-        console.log("Mapped works:", JSON.stringify(works[0], null, 2));
 
         return { works };
     } catch (error) {
-        console.log("ERROR", error.message)
         // Fallback mock data wanneer Strapi niet draait
         const mockWorks = [
             {
